@@ -1,0 +1,43 @@
+server {
+	include conf.d/listen_https.conf;
+	server_name  openoffice.example.com;
+
+	ssl_certificate /etc/letsencrypt/live/openoffice.example.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/openoffice.example.com/privkey.pem;
+
+	# static files
+	location ^~ /loleaflet {
+		proxy_pass https://openoffice:9980;
+		proxy_set_header Host $http_host;
+	}
+
+	# WOPI discovery URL
+	location ^~ /hosting/discovery {
+		proxy_pass https://openoffice:9980;
+		proxy_set_header Host $http_host;
+	}
+
+	# main websocket
+	location ~ ^/lool/(.*)/ws$ {
+		proxy_pass https://openoffice:9980;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "Upgrade";
+		proxy_set_header Host $http_host;
+		proxy_read_timeout 36000s;
+	}
+
+	# download, presentation and image upload
+	location ~ ^/lool {
+		proxy_pass https://openoffice:9980;
+		proxy_set_header Host $http_host;
+	}
+
+	# Admin Console websocket
+	location ^~ /lool/adminws {
+		proxy_pass https://openoffice:9980;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "Upgrade";
+		proxy_set_header Host $http_host;
+		proxy_read_timeout 36000s;
+	}
+}

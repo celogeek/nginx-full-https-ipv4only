@@ -1,0 +1,22 @@
+version: '2.4'
+
+volumes:
+  web.ssl
+  web.www
+
+services:
+  proxy:
+    image: celogeek/nginx-full-https
+    restart: always
+    volumes:
+      - web.ssl:/etc/letsencrypt
+      - web.www:/var/www
+      - ./sites:/etc/nginx/sites:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    logging:
+      options:
+        max-size: "2m"
+        max-file: "5"
+

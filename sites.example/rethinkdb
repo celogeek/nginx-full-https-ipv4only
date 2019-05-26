@@ -1,0 +1,16 @@
+server {
+	include conf.d/listen_https.conf;
+	server_name  rethinkdb.example.com;
+
+	ssl_certificate /etc/letsencrypt/live/rethinkdb.example.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/rethinkdb.example.com/privkey.pem;
+
+	auth_basic "RethinkDB Admin";
+	auth_basic_user_file htpasswd/rethinkdb;
+
+	location / {
+		include conf.d/proxy_params;
+		proxy_pass http://rethinkdb:8080;
+	}
+}
+

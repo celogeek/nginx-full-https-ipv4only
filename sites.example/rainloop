@@ -1,0 +1,13 @@
+server {
+	include conf.d/listen_https.conf;
+	server_name  rainloop.example.com;
+
+	ssl_certificate /etc/letsencrypt/live/mx.example.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/mx.example.com/privkey.pem;
+
+	location / {
+		include conf.d/proxy_params;
+		proxy_pass http://mail-web:8888;
+	}
+}
+

@@ -1,0 +1,21 @@
+server {
+	include conf.d/listen_https.conf;
+	server_name  nextcloud.example.com;
+
+	ssl_certificate /etc/letsencrypt/live/nextcloud.example.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/nextcloud.example.com/privkey.pem;
+
+	location / {
+		include conf.d/proxy_params;
+		proxy_pass http://nextcloud;
+	}
+
+	location = /.well-known/carddav {
+		return 301 $scheme://$host/remote.php/dav;
+	}
+
+	location = /.well-known/caldav {
+		return 301 $scheme://$host/remote.php/dav;
+	}
+}
+

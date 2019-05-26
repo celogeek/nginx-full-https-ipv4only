@@ -1,0 +1,13 @@
+server {
+	include conf.d/listen_https.conf;
+	server_name  static.example.com;
+
+	ssl_certificate /etc/letsencrypt/live/static.example.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/static.example.com/privkey.pem;
+
+	root /var/www/static;
+
+	location / {
+		try_files $uri =404;
+	}
+}

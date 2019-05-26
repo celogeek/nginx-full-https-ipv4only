@@ -1,0 +1,7 @@
+# Full HTTPS NGINX
+
+This docker allow you to deploy full https services quickly.
+
+[Read more](https://blog.celogeek.com/blog/docker/2019/03/nginx_full_https_proxy/)
+
+

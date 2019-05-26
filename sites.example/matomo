@@ -1,0 +1,12 @@
+server {
+	include conf.d/listen_https.conf;
+	server_name matomo.example.com;
+
+	ssl_certificate /etc/letsencrypt/live/matomo.example.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/matomo.example.com/privkey.pem;
+
+	location / {
+		include conf.d/proxy_params;
+		proxy_pass http://matomo;
+	}
+}

@@ -1,0 +1,23 @@
+language: bash
+
+services:
+  - docker
+
+env:
+  global:
+  - REPO=${TRAVIS_REPO_SLUG}
+
+script:
+#  - docker pull $REPO:latest
+#  - docker build --cache-from $REPO:latest -t $REPO:latest .
+  - docker build -t $REPO:latest .
+
+after_success:
+    - if [ -n "$TRAVIS_TAG" ]; then
+        docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+        docker tag $REPO:latest $REPO:$TRAVIS_TAG;
+        docker push $REPO;
+      else
+        echo "not a tag branch, skip deploy...";
+      fi
+
